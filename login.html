@@ -1,0 +1,125 @@
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+    <title>Pragati Township Private limited</title>
+
+</head>
+
+<body>
+    <div class="container" style="padding: 1.5rem; background-color: #f7f7f9;">
+
+        <div class="row pt-45">
+
+            <div class="col-md-12" style="text-align: center">
+                <h3><strong style="color: #038948">Spring Capital </strong></h3>
+                <strong>Login Form</strong>
+            </div>
+        </div>
+
+        <div class="row pt-45">
+
+            <div class="col-md-12 ">
+
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Email Id </label>
+                            <input type="text" class="form-control" id="user_email">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">  Password      </label>
+                            <input type="text" class="form-control" id="user_password">
+                        </div>
+
+                    </div> 
+                </div>
+              
+
+                <div class="row  pt-2">
+                    <div class="col-md-12 text-center pt-45">
+
+                        <!--<button type="submit"  onclick="window.location.href='thankyou.html','_blank'; return false;" class="btn btn-success mb-2  pt-45">Submit  </button>-->
+                        <button type="submit" onclick="return submit();" class="btn btn-success mb-2  pt-45">Submit  </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+
+
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({ html: true });
+        });
+
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        function myFunction(i, j, k, l, m) {
+
+            $("#divText").html('<div style="line-height:26px; text-align: left; color: #333; font-size: 14px; "> <span style="width: 100px; display: inline-block;">Plot No:</span>  <b> ' + i + '</b> <br> <span style="width: 100px; display: inline-block;">Plot Type </span>  <b> ' + j + ' </b> <br> <span style="width: 100px; display: inline-block;"> Area </span>  <b> ' + k + ' </b> <br> <span style="width: 100px; display: inline-block;">Facing </span> <b> ' + l + ' </b> <br> <span style="width: 100px; display: inline-block;">Status </span>  <b> ' + m + ' </b> <br><br>  For Booking Enquiry  <a href="#" style="background-color: #199319; color: white; font-weight: bold; border-radius: 15px; padding: 3px 25px; text-decoration: none;"> Click Here </a> </div>').fadeIn(500);
+
+            $('#tabData').focus();
+
+
+        }
+        function getParamValuesByName(querystring) {
+            var qstring = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < qstring.length; i++) {
+                var urlparam = qstring[i].split('=');
+                if (urlparam[0] == querystring) {
+                    return urlparam[1];
+                }
+            }
+        }
+
+        function submit() {
+            var data = {
+                "USER_EMAIL": document.getElementById("user_email").value,
+                "USER_PASSWORD": document.getElementById("user_password").value,
+            }
+            loginRequest(data)
+
+        }
+        const loginRequest = (user) => {
+            axios.post('https://pragathi-project.herokuapp.com/api/user/login', user)
+                .then(response => {
+                    const addedUser = response.data;
+                    window.localStorage.setItem("userData",JSON.stringify(addedUser.data))
+                    console.log(`POST: user is added`, addedUser);
+                    window.location.href ="./admin/enquiry-list.html";
+                })
+                .catch(error => console.error(error));
+        };
+
+    </script>
+
+
+</body>
+</html>
