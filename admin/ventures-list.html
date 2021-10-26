@@ -78,7 +78,7 @@
                 </div>
                 <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
                     <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
-                        <ul class="kt-menu__nav" id="ulHr" runat="server">
+                        <ul class="kt-menu__nav" id="admin" runat="server">
                             <li class="kt-menu__section ">
                                 <h4 class="kt-menu__section-text">Admin Operations</h4>
                                 <i class="kt-menu__section-icon flaticon-more-v2"></i>
@@ -114,7 +114,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <ul class="kt-menu__nav">
+                        <ul class="kt-menu__nav" id="user">
 
                             <li class="kt-menu__section ">
                                 <h4 class="kt-menu__section-text">User Operations</h4>
@@ -372,8 +372,14 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
  
      <script>
-         window.onload =async function()
+              window.onload =async function()
          {
+            var userRole = window.localStorage.getItem("userData") &&  JSON.parse(window.localStorage.getItem("userData")).USER_TYPE;
+            if(userRole == 'Admin') 
+               document.getElementById("user").style.display  = 'none';
+             else
+                document.getElementById("admin").style.display  = 'none';
+
            await axios.get('https://pragathi-project.herokuapp.com/api/venture/get_venture')
                 .then(response => {
                     const ventureData = response.data.data;
