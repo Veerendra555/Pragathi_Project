@@ -399,10 +399,10 @@
                                                                 ${ventureData[i].VEN_ADDRESS}
                                                             </td>
                                                             <td>
-                                                                <a href="javascript:;">
+                                                                <a href="javascript:;" onclick="editVenture(${ventureData[i].VEN_ID})">
                                                                     <span class="badge badge-success"><i class="fa fa-pencil"></i> </span>
                                                                 </a>
-                                                                <a href="javascript:;">
+                                                                <a href="javascript:;" onclick="statusUpdate(${JSON.stringify(ventureData[i])})">
                                                                     <span class="badge badge-danger"><i class="fa fa-trash"></i> </span>
                                                                 </a>
                                                             </td>
@@ -415,6 +415,24 @@
 
 
          }
+         function editVenture(data){
+          window.location.href =`ventures.html?VEN_ID=${data}`
+          };
+          function statusUpdate(data) {
+            alert("Hellow")
+            data = JSON.parse(data)
+            //   if(window.confirm("Are You Sure To Change Status")){
+            //       data.VEN_STATUS = !data.VEN_STATUS;
+            //     axios.put('https://pragathi-project.herokuapp.com/api/venture/edit_venture',data)
+            //         .then(response => {
+            //             const venture = response.data;
+            //             if(venture.type == 'success' && venture.code == 200)
+            //              window.location.href ='ventures-list.html';
+            //             console.log(`POST: user is added`, venture);
+            //         })
+            //         .catch(error => console.error(error));
+            //   }
+        }
      </script>
 
 

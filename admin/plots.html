@@ -190,6 +190,9 @@
                                         <div class="kt-portlet__body">
 
                                             <div class="form-group row">
+                                                <div class="kt-input-icon">
+                                                    <input id="PLOT_ID" type="hidden" class="form-control" />
+                                                </div>
 
                                                 <div class="col-lg-6">
                                                     <label>  Venture :</label>
@@ -257,7 +260,9 @@
                                             <div class="kt-form__actions">
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <input id="Button1" type="button" class="btn btn-primary" value="Save" onclick="return submit();"/>
+                                                        <input id="save" type="button" class="btn btn-primary" value="Save" onclick="return submit();"/>
+                                                        <input id="update" type="button" class="btn btn-primary" value="Update" onclick="return update();"/>
+                                                     
                                                         <input id="Button1" type="button"  onclick="window.location.href='plots-list.html','_blank'; return false;"  class="btn btn-secondary" value="Cancel" />
 
                                                     </div>
@@ -330,7 +335,7 @@
             if(userRole == 'Admin') 
                document.getElementById("user").style.display  = 'none';
              else
-                document.getElementById("admin").style.display  = 'none';
+                document.getElementById("admin").style.display  = 'none';      
             var ventureData=[];
            await axios.get('https://pragathi-project.herokuapp.com/api/venture/get_venture')
                 .then(response => {
@@ -343,6 +348,29 @@
                          document.getElementById('ventureDropdown').innerHTML = dropDwonData;                           
                 })
                 .catch(error => console.error(error));
+                const urlParams = new URLSearchParams(window.location.search);
+            const PLOT_ID = urlParams.get('PLOT_ID');
+            console.log(PLOT_ID);
+            if(PLOT_ID != null)
+             {
+                await axios.get(`https://pragathi-project.herokuapp.com/api/plot/get_plot_byid/${PLOT_ID}`)
+                .then(response => {
+                    const plotData = response.data.data;
+                    document.getElementById("save").style.display  = 'none';
+                    document.getElementById("ventureDropdown").value = plotData.PLOT_VEN_ID
+                    document.getElementById("PLOT_NO").value = plotData.PLOT_NO
+                document.getElementById("PLOT_TYPE").value  = plotData.PLOT_TYPE,
+               document.getElementById("PLOT_AREA").value  = plotData.PLOT_AREA,
+                 document.getElementById("PLOT_FACING").value  = plotData.PLOT_FACING,
+               document.getElementById("PLOT_ID").value  = plotData.PLOT_ID                 
+                })
+                .catch(error => console.error(error));
+
+             }
+             else
+             {
+                document.getElementById("update").style.display  = 'none';
+             }     
           }
           function submit() {
             var data = {
@@ -361,6 +389,30 @@
                     if(addedPlot.type == 'success' && addedPlot.code == 200)
                      window.location.href ='plots-list.html';
                     console.log(`POST: user is added`, addedPlot);
+                })
+                .catch(error => console.error(error));
+        };
+
+        function update() {
+            var data = {
+                "PLOT_ID": document.getElementById("PLOT_ID").value,
+                "PLOT_VEN_ID": document.getElementById("ventureDropdown").value,
+                "PLOT_NO": document.getElementById("PLOT_NO").value,
+                "PLOT_TYPE": document.getElementById("PLOT_TYPE").value,
+                "PLOT_AREA": document.getElementById("PLOT_AREA").value,
+                "PLOT_FACING": document.getElementById("PLOT_FACING").value,
+                "PLOT_STATUS": 1
+                // "USER_CREATEDBY" : 'Admin',
+            }
+            updateRequest(data)
+        }
+        const updateRequest = (data) => {
+            axios.put('https://pragathi-project.herokuapp.com/api/plot/edit_plot', data)
+                .then(response => {
+                    const addedUser = response.data;
+                    if(addedUser.type == 'success' && addedUser.code == 200)
+                     window.location.href ='plots-list.html';
+                    console.log(`POST: user is added`, addedUser);
                 })
                 .catch(error => console.error(error));
         };

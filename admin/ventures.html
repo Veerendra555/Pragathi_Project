@@ -216,7 +216,9 @@
                                         <div class="kt-portlet__body">
 
                                             <div class="form-group row">
-
+                                                <div class="kt-input-icon">
+                                                    <input id="VEN_ID" type="hidden" class="form-control" />
+                                                </div>
                                                 <div class="col-lg-6">
                                                     <label> Venture Name :</label>
                                                     <div class="kt-input-icon">
@@ -303,8 +305,9 @@
                                             <div class="kt-form__actions">
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <input id="Button1" type="button" class="btn btn-primary"
+                                                        <input id="save" type="button" class="btn btn-primary"
                                                             value="Save"  onclick="return submit();" />
+                                                            <input id="update" type="button" class="btn btn-primary" value="Update" onclick="return update();"/>
                                                         <input id="Button1" type="button"
                                                             onclick="window.location.href='ventures-list.html','_blank'; return false;"
                                                             class="btn btn-secondary" value="Cancel" />
@@ -375,6 +378,33 @@
                document.getElementById("user").style.display  = 'none';
              else
                 document.getElementById("admin").style.display  = 'none';
+                const urlParams = new URLSearchParams(window.location.search);
+            const VEN_ID = urlParams.get('VEN_ID');
+            console.log(VEN_ID);
+            if(VEN_ID != null)
+             {
+                await axios.get(`https://pragathi-project.herokuapp.com/api/venture/get_venture_byid/${VEN_ID}`)
+                .then(response => {
+                    const ventureData = response.data.data;
+                    document.getElementById("save").style.display  = 'none';
+                    document.getElementById("VEN_NAME").value = ventureData.VEN_NAME
+                    document.getElementById("VEN_ID").value = ventureData.VEN_ID
+                document.getElementById("VEN_ADDRESS").value  = ventureData.VEN_ADDRESS,
+               document.getElementById("VEN_PLOTS").value  = ventureData.VEN_PLOTS,
+                 document.getElementById("VEN_PHONE").value  = ventureData.VEN_PHONE,
+               document.getElementById("VEN_EMAIL").value  = ventureData.VEN_EMAIL,
+                 document.getElementById("VEN_WEBSITE").value  = ventureData.VEN_WEBSITE,
+               document.getElementById("VEN_LOCATION_PROSPECTS").value  = ventureData.VEN_LOCATION_PROSPECTS,
+             document.getElementById("VEN_TOURIST_PLACE").value  = ventureData.VEN_TOURIST_PLACE,
+                   console.log(userData)                  
+                })
+                .catch(error => console.error(error));
+
+             }
+             else
+             {
+                document.getElementById("update").style.display  = 'none';
+             }       
          }
           function submit() {
             var data = {
@@ -400,6 +430,34 @@
                 })
                 .catch(error => console.error(error));
         };
+
+        function update() {
+            var data = {
+                "VEN_ID": document.getElementById("VEN_ID").value,
+                "VEN_NAME": document.getElementById("VEN_NAME").value,
+                "VEN_ADDRESS": document.getElementById("VEN_ADDRESS").value,
+                "VEN_PLOTS": document.getElementById("VEN_PLOTS").value,
+                "VEN_PHONE": document.getElementById("VEN_PHONE").value,
+                "VEN_EMAIL": document.getElementById("VEN_EMAIL").value,
+                "VEN_WEBSITE": document.getElementById("VEN_WEBSITE").value,
+                "VEN_LOCATION_PROSPECTS": document.getElementById("VEN_LOCATION_PROSPECTS").value,
+                "VEN_TOURIST_PLACE": document.getElementById("VEN_TOURIST_PLACE").value,
+                "VEN_STATUS": 1
+                // "USER_CREATEDBY" : 'Admin',
+            }
+            updateRequest(data)
+        }
+        const updateRequest = (data) => {
+            axios.put('https://pragathi-project.herokuapp.com/api/venture/edit_venture', data)
+                .then(response => {
+                    const addedUser = response.data;
+                    if(addedUser.type == 'success' && addedUser.code == 200)
+                     window.location.href ='ventures-list.html';
+                    console.log(`POST: user is added`, addedUser);
+                })
+                .catch(error => console.error(error));
+        };
+
 
     </script>
 </body>

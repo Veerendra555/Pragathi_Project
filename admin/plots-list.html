@@ -488,7 +488,7 @@
 </td>
 <td class="center"> ${plotList[i].PLOT_FACING} </td>
 <td>
-    <a href="javascript:;">
+    <a href="javascript:;" onclick="editPlot(${plotList[i].PLOT_ID})">
         <span class="badge badge-success"><i class="fa fa-pencil"></i> </span>
     </a>
     <a href="javascript:;">
@@ -504,6 +504,10 @@
                 })
                 .catch(error => console.error(error));
         };
+
+        function editPlot(data){
+          window.location.href =`plots.html?PLOT_ID=${data}`
+      }
 
      </script>
 
